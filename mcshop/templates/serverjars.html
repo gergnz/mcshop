@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="title text-center">
+  New Minecraft Instance
+</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-1 p-3 bg-light border rounded">
+      <h2>Version</h2>
+      <select id="version" name="version">
+        {% for item in mc_versions['versions'] %}
+          <option value="{{ item['id'] }}">{{ item['id'] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 offset-md-1 p-3 bg-light border rounded g-1">
+      <h2>Ops</h2>
+      <input type="text" id="opnamesearch">
+      <button id="opsearch" class="btn btn-primary btn-sm">Search</button>
+      <div id="opsearchstatus" class="pt-2"></div>
+      <select id="opusers" class="form-select" size="6" multiple>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 offset-md-1 p-3 bg-light border rounded g-1">
+      <h2>Whitelist</h2>
+      <input type="text" id="whitelistnamesearch">
+      <button id="whitelistsearch" class="btn btn-primary btn-sm">Search</button>
+      <div id="whitelistsearchstatus" class="pt-2"></div>
+      <select id="whitelistusers" class="form-select" size="6" multiple>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 offset-md-1 p-3 bg-light border rounded g-1">
+      <div class="pb-3">
+        <h2>Server Name</h2>
+        <input type="text" id="servername" name="servername">
+        <div id="servername_info" class="pt-1">
+            <h6 class="invalid">Server Name can only contain letters, numbers, -, and _.</h6>
+        </div>
+      </div>
+      <button id="create" class="btn btn-primary">Create New Server</button>
+      <div id="createstatus" class="pt-3"></div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

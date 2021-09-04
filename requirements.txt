@@ -1,0 +1,6 @@
+pylint
+flask
+flask-sqlalchemy
+flask-login
+flask-table
+docker

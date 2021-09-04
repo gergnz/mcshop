@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="title text-center">
+  Minecraft Instances
+</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-1">
+          {{ allminecrafts|safe }}
+        </div>
+    </div>
+</div>
+{% endblock %}
