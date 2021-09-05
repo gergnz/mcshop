@@ -2,10 +2,27 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required
 from flask_table import Table, Col, ButtonCol
+from flask_table.html import element
 from .models import User
 from . import db
 
 auth = Blueprint('auth', __name__)
+
+class ModalCol(ButtonCol):
+    def td_contents(self, item, attr_list):
+        button_attrs = dict(self.button_attrs)
+        button_attrs['data-href']=self.url(item)
+        button = element(
+            'button',
+            attrs=button_attrs,
+            content=self.text(item, attr_list),
+        )
+        form_attrs = dict(self.form_attrs)
+        form_attrs.update(dict(
+            method='post',
+            action=self.url(item),
+        ))
+        return button
 
 @auth.route('/login', methods=['GET'])
 def login():
@@ -15,7 +32,7 @@ def login():
 def login_post():
     email = request.form.get('email')
     password = request.form.get('password')
-    remember_me = True if request.form.get('rememberMe') else False
+    remember_me = bool(request.form.get('rememberMe'))
 
     user = User.query.filter_by(email=email).first()
 
@@ -49,8 +66,8 @@ def signup_post():
     new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'))
 
     # add the new user to the database
-    db.session.add(new_user)
-    db.session.commit()
+    db.session.add(new_user) #pylint: disable=no-member
+    db.session.commit() #pylint: disable=no-member
 
     return redirect(url_for('auth.login'))
 
@@ -63,7 +80,12 @@ def logout():
 class UserTable(Table):
     name = Col('Name')
     email = Col('Email')
-    delete = ButtonCol('Delete', 'auth.deluser', url_kwargs=dict(id='id'), button_attrs={'class': 'btn btn-danger btn-sm'})
+    delete = ModalCol(
+        'Delete',
+        'auth.deluser',
+        url_kwargs=dict(id='id'),
+        button_attrs={'class': 'btn btn-danger btn-sm', 'data-bs-toggle': 'modal', 'data-bs-target': '#deleteModal'}
+    )
     classes = ['table', 'table-striped', 'table-bordered', 'bg-light']
     html_attrs = dict(cellspacing='0')
     table_id = 'allusers'
@@ -87,8 +109,8 @@ def deluser():
         flash("The craziest thing happened, the user doesn't exist!")
         return redirect(url_for('auth.users'))
 
-    db.session.delete(user)
-    db.session.commit()
+    db.session.delete(user) #pylint: disable=no-member
+    db.session.commit() #pylint: disable=no-member
 
     return redirect(url_for('auth.users'))
 
@@ -110,7 +132,7 @@ def adduser():
     new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'))
 
     # add the new user to the database
-    db.session.add(new_user)
-    db.session.commit()
+    db.session.add(new_user) #pylint: disable=no-member
+    db.session.commit() #pylint: disable=no-member
 
     return redirect(url_for('auth.users'))

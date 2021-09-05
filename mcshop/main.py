@@ -5,10 +5,27 @@ from urllib.request import urlretrieve
 from flask import Blueprint, render_template, redirect, url_for, request, send_from_directory, jsonify
 from flask_login import login_required, current_user
 from flask_table import Table, Col, ButtonCol
+from flask_table.html import element
 import docker
 import requests
 
 main = Blueprint('main', __name__)
+
+class ModalCol(ButtonCol):
+    def td_contents(self, item, attr_list):
+        button_attrs = dict(self.button_attrs)
+        button_attrs['data-href']=self.url(item)
+        button = element(
+            'button',
+            attrs=button_attrs,
+            content=self.text(item, attr_list),
+        )
+        form_attrs = dict(self.form_attrs)
+        form_attrs.update(dict(
+            method='post',
+            action=self.url(item),
+        ))
+        return button
 
 @main.route('/favicon.ico')
 def favicon():
@@ -31,12 +48,12 @@ class ContainerTable(Table):
     status = Col('Status')
     image = Col('Image')
     name = Col('Name')
-    delete = ButtonCol(
+    delete = ModalCol(
         'Delete',
         'main.containermgt',
         url_kwargs=dict(id='id'),
         url_kwargs_extra=dict(task='delete'),
-        button_attrs={'class': 'btn btn-danger btn-sm'}
+        button_attrs={'class': 'btn btn-danger btn-sm', 'data-bs-toggle': 'modal', 'data-bs-target': '#deleteModal'}
     )
     stop = ButtonCol(
         'Stop',
@@ -167,12 +184,12 @@ def newmcserver(): #pylint: disable=too-many-locals
 
 class MinecraftTable(Table):
     name = Col('Name')
-    delete = ButtonCol(
+    delete = ModalCol(
         'Delete',
         'main.minecraftmgt',
         url_kwargs=dict(name='name'),
         url_kwargs_extra=dict(task='delete'),
-        button_attrs={'class': 'btn btn-danger btn-sm'}
+        button_attrs={'class': 'btn btn-danger btn-sm', 'data-bs-toggle': 'modal', 'data-bs-target': '#deleteModal'}
     )
     run = ButtonCol(
         'Run',

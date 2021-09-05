@@ -37,15 +37,15 @@
   </div>
   <div class="row">
     <div class="col-md-6 offset-md-1 p-3 bg-light border rounded g-1">
-      <div class="pb-3">
+      <div class="pb-1">
         <h2>Server Name</h2>
         <input type="text" id="servername" name="servername">
         <div id="servername_info" class="pt-1">
-            <h6 class="invalid">Server Name can only contain letters, numbers, -, and _.</h6>
+          <p><small>Server Name must start with a letter or number, must be at least one character and can only contain letters, numbers, -, and _.</small></p>
         </div>
       </div>
-      <button id="create" class="btn btn-primary">Create New Server</button>
-      <div id="createstatus" class="pt-3"></div>
+      <button id="create" disabled="True" class="btn btn-primary">Create New Server</button>
+      <div id="createstatus" class="pt-1"></div>
     </div>
   </div>
 </div>

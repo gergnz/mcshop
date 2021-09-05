@@ -55,17 +55,16 @@ $(document).ready(function() {
   });
   $('#servername').keyup(function() {
     var servername = $('#servername').val();
-    if ( !servername.match(/^[a-zA-Z0-9_-]*$/)) {
+    if ( !servername.match(/^[a-zA-Z0-9]+[a-zA-Z0-9_-]*$/)) {
       $('#servername_info').removeClass('text-success').addClass('text-danger');
       $('#create').prop("disabled", true);
     } else {
       $('#servername_info').removeClass('text-danger').addClass('text-success');
       $('#create').prop("disabled", false);
     }
-  }).focus(function() {
-    $('#servername_info').show();
-  }).blur(function() {
-    $('#servername_info').hide();
+  });
+  $('#deleteModal').on('show.bs.modal', function(e) {
+      $(this).find('#formdelete').attr('action', $(e.relatedTarget).data('href'));
   });
 });
 
