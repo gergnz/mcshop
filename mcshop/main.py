@@ -217,6 +217,8 @@ def minecrafts():
 
     allminecrafts=[]
     for item in os.listdir('minecraft'):
+        if item.startswith('.'):
+            continue
         allminecrafts.append({'name': item})
 
     table = MinecraftTable(allminecrafts)
@@ -240,9 +242,9 @@ def minecraftmgt():
             'amazoncorretto:16',
             '/app/start.sh',
             detach=True,
-            restart_policy={"Name": "always", "MaximumRetryCount": 5},
+            restart_policy={"Name": "always"},
             ports={'25565/tcp': ('172.30.0.13', 25565)},
-            volumes=['/home/ec2-user/minecraft/jakosmp:/app'],
+            volumes=['/home/ec2-user/minecraft/'+name+':/app'],
             name=name
         )
 
