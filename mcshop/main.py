@@ -8,6 +8,7 @@ from flask_table import Table, Col, ButtonCol
 from flask_table.html import element
 import docker
 import requests
+from .mcfiles import start_sh, server_props
 
 main = Blueprint('main', __name__)
 
@@ -180,6 +181,14 @@ def newmcserver(): #pylint: disable=too-many-locals
     with open('minecraft/'+servername+'/eula.txt', 'w', encoding='ascii') as file:
         file.write('eula=true')
 
+    with open('minecraft/'+servername+'/start.sh', 'w', encoding='ascii') as file:
+        file.write(start_sh)
+
+    os.chmod('minecraft/'+servername+'/start.sh', 0o755)
+
+    with open('minecraft/'+servername+'/server.properties', 'w', encoding='ascii') as file:
+        file.write(server_props)
+
     return ''
 
 class MinecraftTable(Table):
@@ -227,6 +236,14 @@ def minecraftmgt():
 
     if task == 'run':
         client = docker.from_env()
-        client.containers.run('nginx', detach=True, name=name)
+        client.containers.run(
+            'amazoncorretto:16',
+            '/app/start.sh',
+            detach=True,
+            restart_policy={"Name": "always", "MaximumRetryCount": 5},
+            ports={'25565/tcp': ('172.30.0.13', 25565)},
+            volumes=['/home/ec2-user/minecraft/jakosmp:/app'],
+            name=name
+        )
 
     return redirect(url_for('main.minecrafts'))
