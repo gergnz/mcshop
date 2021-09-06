@@ -7,12 +7,12 @@ server_props="""enable-jmx-monitoring=false
 rcon.port=25575
 level-seed=
 enable-command-block=false
-gamemode=survival
+gamemode=GAMEMODE
 enable-query=false
 generator-settings=
-level-name=LEVELNAME
-motd=MOTD
-query.port=25565
+level-name=NAME
+motd=NAME
+query.port=PORT
 pvp=true
 generate-structures=true
 difficulty=normal

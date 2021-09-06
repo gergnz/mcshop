@@ -37,15 +37,26 @@ $(document).ready(function() {
   $("#create").click(function() {
     $('#createstatus').html('<img src="/static/giphy.gif" height="50">');
     var opusers = $('#opusers').val();
+    var data="opusers="+opusers
     var whitelistusers = $('#whitelistusers').val();
+    data=data+"&whitelistusers="+whitelistusers
     var version = $('#version').val()
+    data=data+"&version="+version
     var servername = $('#servername').val()
-    $.post("/newmcserver", data="opusers="+opusers+"&whitelistusers="+whitelistusers+'&version='+version+'&servername='+servername)
+    data=data+'&servername='+servername
+    var serverrunner = $('#serverrunner').val()
+    data=data+'&serverrunner='+serverrunner
+    var port = $('#port').val()
+    data=data+'&port='+port
+    var gamemode = $('#gamemode').val()
+    data=data+'&gamemode='+gamemode
+    $.post("/newmcserver", data=data)
     .done(function() {
       $('#createstatus').html('<div class="alert alert-success" role="alert">Server Created Successfully.</div>');
     })
-    .fail(function() {
-      $('#createstatus').html('<div class="alert alert-danger" role="alert">Server Creation Failed.</div>');
+    .fail(function(data) {
+      var result = data.responseJSON;
+      $('#createstatus').html('<div class="alert alert-danger" role="alert">Server Creation Failed. '+result['Error']+'</div>');
     })
   });
   $('#servername').keypress(function(e){
@@ -65,6 +76,11 @@ $(document).ready(function() {
   });
   $('#deleteModal').on('show.bs.modal', function(e) {
       $(this).find('#formdelete').attr('action', $(e.relatedTarget).data('href'));
+  });
+  $('#alertclose').click(function(){
+    $('.alert').fadeTo(0, 500).slideUp(500, function(){
+      $('.alert').slideUp(500);
+    });
   });
 });
 
