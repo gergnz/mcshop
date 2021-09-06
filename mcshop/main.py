@@ -255,6 +255,8 @@ def minecraftmgt():
 
     if task == 'run':
         try:
+            bind_ip = os.environ.get('BIND_IP')
+            minecraft_home = os.environ.get('MC_HOME')
             with open('minecraft/'+name+'/mc.json', "r", encoding='UTF-8') as mc_file:
                 mc_vars = json.load(mc_file)
             client = docker.from_env()
@@ -263,10 +265,8 @@ def minecraftmgt():
                 '/app/start.sh',
                 detach=True,
                 restart_policy={"Name": "always"},
-                #ports={'25565/tcp': ('172.30.0.13', 25565)},
-                ports={mc_vars['port']+'/tcp': ('10.250.250.209', mc_vars['port'])},
-                #volumes=['/home/ec2-user/minecraft/'+name+':/app'],
-                volumes=['/Users/gregc/Scratch/dev/gergnz/mcshop/minecraft/'+name+':/app'],
+                ports={mc_vars['port']+'/tcp': (bind_ip, mc_vars['port'])},
+                volumes=[minecraft_home+name+':/app'],
                 name=name
             )
             flash("Container is running.", "success")
