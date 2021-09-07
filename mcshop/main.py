@@ -2,7 +2,7 @@ import os
 import json
 import shutil
 from urllib.request import urlretrieve
-from flask import Blueprint, render_template, redirect, url_for, request, send_from_directory, jsonify, flash
+from flask import Blueprint, render_template, redirect, url_for, request, send_from_directory, jsonify, flash, Response
 from flask_login import login_required, current_user
 from flask_table import Table, Col, ButtonCol
 from flask_table.html import element
@@ -274,3 +274,16 @@ def minecraftmgt():
             flash(f"Failed to run docker: {error}.", "danger")
 
     return redirect(url_for('main.minecrafts'))
+
+def flask_logger():
+    """creates logging information"""
+    client = docker.from_env()
+    cont = client.containers.get('388dfb5ddd77')
+    for i in cont.logs(stream=True, tail=5):
+        yield i
+
+@main.route("/log_stream", methods=["GET"])
+@login_required
+def stream():
+    """returns logging information"""
+    return Response(flask_logger(), mimetype="text/plain", content_type="text/event-stream")

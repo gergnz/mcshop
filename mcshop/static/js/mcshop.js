@@ -82,6 +82,13 @@ $(document).ready(function() {
       $('.alert').slideUp(500);
     });
   });
+  var output = document.getElementById('output');
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', '/log_stream', true);
+  xhr.send();
+  setInterval(function() {
+    output.textContent = xhr.responseText;
+  }, 500);
 });
 
 function getURL(url){
