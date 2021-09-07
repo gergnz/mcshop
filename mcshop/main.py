@@ -278,7 +278,7 @@ def minecraftmgt():
 def flask_logger():
     """creates logging information"""
     client = docker.from_env()
-    cont = client.containers.get('388dfb5ddd77')
+    cont = client.containers.get('8de28d502f13')
     for i in cont.logs(stream=True, tail=5):
         yield i
 
