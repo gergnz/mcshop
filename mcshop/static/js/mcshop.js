@@ -29,9 +29,9 @@ $(document).ready(function() {
       $('#whitelistusers').append($('<option selected value="'+json['name']+'">'+json['name']+'-'+json['id']+'</option>'));
     }
   });
-  $('#whitelistnamesearch').keypress(function(e){
-    if(e.which == 13){//Enter key pressed
-      $('#whitelistsearch').click();//Trigger search button click event
+  $('#whitelistnamesearch').keypress(function(e) {
+    if(e.which == 13){ //Enter key pressed
+      $('#whitelistsearch').click(); //Trigger search button click event
     }
   });
   $("#create").click(function() {
@@ -59,9 +59,9 @@ $(document).ready(function() {
       $('#createstatus').html('<div class="alert alert-danger" role="alert">Server Creation Failed. '+result['Error']+'</div>');
     })
   });
-  $('#servername').keypress(function(e){
-    if(e.which == 13){//Enter key pressed
-      $('#create').click();//Trigger search button click event
+  $('#servername').keypress(function(e) {
+    if(e.which == 13){ //Enter key pressed
+      $('#create').click(); //Trigger search button click event
     }
   });
   $('#servername').keyup(function() {
@@ -75,20 +75,25 @@ $(document).ready(function() {
     }
   });
   $('#deleteModal').on('show.bs.modal', function(e) {
-      $(this).find('#formdelete').attr('action', $(e.relatedTarget).data('href'));
+    $(this).find('#formdelete').attr('action', $(e.relatedTarget).data('href'));
   });
-  $('#alertclose').click(function(){
+  $('#alertclose').click(function() {
     $('.alert').fadeTo(0, 500).slideUp(500, function(){
       $('.alert').slideUp(500);
     });
   });
-  var output = document.getElementById('output');
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', '/log_stream', true);
-  xhr.send();
-  setInterval(function() {
-    output.textContent = xhr.responseText;
-  }, 500);
+  $('#logsModal').on('show.bs.modal', function(e) {
+    var output = document.getElementById('output');
+    xhr.open('GET', '/log_stream/'+$(e.relatedTarget).data('href'), true);
+    xhr.send();
+    setInterval(function() {
+      output.textContent = xhr.responseText;
+    }, 500);
+  });
+  $('#logsModalClose').click(function() {
+    xhr.abort();
+  });
 });
 
 function getURL(url){

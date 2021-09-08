@@ -21,11 +21,17 @@ class ModalCol(ButtonCol):
             attrs=button_attrs,
             content=self.text(item, attr_list),
         )
-        form_attrs = dict(self.form_attrs)
-        form_attrs.update(dict(
-            method='post',
-            action=self.url(item),
-        ))
+        return button
+
+class Modal2Col(ButtonCol):
+    def td_contents(self, item, attr_list):
+        button_attrs = dict(self.button_attrs)
+        button_attrs['data-href']=self.url_kwargs(item)['id']
+        button = element(
+            'button',
+            attrs=button_attrs,
+            content=self.text(item, attr_list),
+        )
         return button
 
 @main.route('/favicon.ico')
@@ -69,6 +75,12 @@ class ContainerTable(Table):
         url_kwargs=dict(id='id'),
         url_kwargs_extra=dict(task='start'),
         button_attrs={'class': 'btn btn-success btn-sm'}
+    )
+    logs = Modal2Col(
+        'Logs',
+        '',
+        url_kwargs=dict(id='id'),
+        button_attrs={'class': 'btn btn-secondary btn-sm', 'data-bs-toggle': 'modal', 'data-bs-target': '#logsModal'}
     )
     classes = ['table', 'table-striped', 'table-bordered', 'bg-light']
     html_attrs = dict(cellspacing='0')
@@ -275,15 +287,15 @@ def minecraftmgt():
 
     return redirect(url_for('main.minecrafts'))
 
-def flask_logger():
+def flask_logger(containerid):
     """creates logging information"""
     client = docker.from_env()
-    cont = client.containers.get('8de28d502f13')
+    cont = client.containers.get(containerid)
     for i in cont.logs(stream=True, tail=5):
         yield i
 
-@main.route("/log_stream", methods=["GET"])
+@main.route("/log_stream/<containerid>", methods=["GET"])
 @login_required
-def stream():
+def stream(containerid):
     """returns logging information"""
-    return Response(flask_logger(), mimetype="text/plain", content_type="text/event-stream")
+    return Response(flask_logger(containerid), mimetype="text/plain", content_type="text/event-stream")
