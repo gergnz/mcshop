@@ -278,7 +278,7 @@ def minecraftmgt():
                 detach=True,
                 restart_policy={"Name": "always"},
                 ports={mc_vars['port']+'/tcp': (bind_ip, mc_vars['port'])},
-                volumes=[minecraft_home+name+':/app'],
+                volumes=[minecraft_home+'/'+name+':/app'],
                 name=name
             )
             flash("Container is running.", "success")
@@ -291,7 +291,7 @@ def flask_logger(containerid):
     """creates logging information"""
     client = docker.from_env()
     cont = client.containers.get(containerid)
-    for i in cont.logs(stream=True, tail=5):
+    for i in cont.logs(stream=True, tail=30):
         yield i
 
 @main.route("/log_stream/<containerid>", methods=["GET"])
