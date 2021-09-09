@@ -1,5 +1,7 @@
 FROM python:latest
 
+ARG TARGETARCH
+
 ARG DEBIAN_FRONTEND="noninteractive"
 ENV TZ=Australia/Sydney
 
@@ -13,7 +15,11 @@ RUN pip install -r requirements.txt
 
 COPY . /srv
 
-EXPOSE 5000/tcp
+RUN wget -q "https://caddyserver.com/api/download?os=linux&arch=${TARGETARCH}" -O /srv/caddy && \
+    chmod +x /srv/caddy
 
-#CMD ["supervisord","-c","/srv/supervisor.conf"]
-CMD ["/usr/local/bin/uwsgi", "--ini", "/srv/uwsgi.ini"]
+EXPOSE 5000/tcp
+EXPOSE 443/tcp
+EXPOSE 80/tcp
+
+CMD ["supervisord","-c","/srv/supervisor.conf"]
