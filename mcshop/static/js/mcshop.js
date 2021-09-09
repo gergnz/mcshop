@@ -94,6 +94,73 @@ $(document).ready(function() {
   $('#logsModalClose').click(function() {
     xhr.abort();
   });
+  $('#generateqrcode').click(function(){
+    //TODO: Fix useremailid
+    var useremailid = $('#useremailid').text();
+    var response = JSON.parse(getURL('/token'))
+    $('#qrcode').qrcode("otpauth://totp/mcshop:"+useremailid+"?secret="+response.SecretCode+"&issuer=mcshop");
+    $('#tokenstring').html( response.SecretCode )
+  });
+  $('input[type=password]').keyup(function() {
+
+    //check if they match
+    if ($('#newpwone').val() === $('#newpwtwo').val()) {
+      $('#match').removeClass('text-danger').addClass('text-success');
+      $('#changepassword').prop("disabled", false);
+    } else {
+      $('#match').removeClass('text-success').addClass('text-danger');
+      $('#changepassword').prop("disabled", true);
+    }
+
+    var pswd = $('#newpwone').val();
+
+    if (pswd != null) {
+      //text-successate the length
+      if ( pswd.length < 8 ) {
+        $('#length').removeClass('text-success').addClass('text-danger');
+        $('#changepassword').prop("disabled", true);
+      } else {
+        $('#length').removeClass('text-danger').addClass('text-success');
+      }
+
+      //text-successate letter
+      if ( pswd.match(/[A-z]/) ) {
+        $('#letter').removeClass('text-danger').addClass('text-success');
+      } else {
+        $('#letter').removeClass('text-success').addClass('text-danger');
+        $('#changepassword').prop("disabled", true);
+      }
+
+      //text-successate capital letter
+      if ( pswd.match(/[A-Z]/) ) {
+        $('#capital').removeClass('text-danger').addClass('text-success');
+      } else {
+        $('#capital').removeClass('text-success').addClass('text-danger');
+        $('#changepassword').prop("disabled", true);
+      }
+
+      //text-successate number
+      if ( pswd.match(/\d/) ) {
+        $('#number').removeClass('text-danger').addClass('text-success');
+      } else {
+        $('#number').removeClass('text-success').addClass('text-danger');
+        $('#changepassword').prop("disabled", true);
+      }
+
+      //text-successate symbol
+      if ( pswd.match(/[$-/:-?{-~!"^_`\[\]]/) ) {
+        $('#symbol').removeClass('text-danger').addClass('text-success');
+      } else {
+        $('#symbol').removeClass('text-success').addClass('text-danger');
+        $('#changepassword').prop("disabled", true);
+      }
+    }
+
+    }).focus(function() {
+      $('#pswd_info').show();
+    }).blur(function() {
+      $('#pswd_info').hide();
+  });
 });
 
 function getURL(url){

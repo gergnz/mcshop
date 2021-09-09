@@ -4,4 +4,46 @@
 <h1 class="title">
   Welcome, {{ name }}!
 </h1>
+      <div class="p-1 row">
+        <div class="col-md-6 offset-md-1 p-3 bg-light border rounded">
+          <h3>Change your password:</h3>
+          <form action="/changepassword" method="post">
+            <div class="py-1"><label for="existing">Existing Password:</label></div>
+            <div class="py-1"><input type="password" id="existing" name="existing" size="50" autocomplete="current-password"></div>
+            <div class="py-1"><label for="newpwone">New Password:</label></div>
+            <div class="py-1"><input type="password" id="newpwone" name="newpwone" size="50" autocomplete="new-password"></div>
+            <div class="py-1"><label for="newpwtwo">Re-Enter Password:</label></div>
+            <div class="py-1"><input type="password" id="newpwtwo" name="newpwtwo" size="50" autocomplete="new-password"></div>
+            <div class="py-1"><input class="btn-dark btn" type="submit" id="changepassword" value="Change Password"></div>
+          </form>
+          <div id="pswd_info" style="display: none;">
+              <h6>Password must meet the following requirements:</h6>
+              <ul>
+                  <li id="match" class="text-danger">Passwords must <strong>match</strong></li>
+                  <li id="symbol" class="text-danger">At least <strong>one symbol</strong></li>
+                  <li id="letter" class="text-danger">At least <strong>one letter</strong></li>
+                  <li id="capital" class="text-danger">At least <strong>one capital letter</strong></li>
+                  <li id="number" class="text-danger">At least <strong>one number</strong></li>
+                  <li id="length" class="text-danger">Be at least <strong>8 characters</strong></li>
+              </ul>
+          </div>
+        </div>
+        <div class="col-md-6 offset-md-1 p-3 bg-light border rounded g-1">
+          <h3>Setup / Reset MFA:</h3>
+          <div class="p-1 row">
+            <div class="col-sm">
+              <div class="py-1"><input class="btn-dark btn" type="submit" id="generateqrcode" value="Generate Token"></div>
+              <div id="qrcode"></div>
+            </div>
+            <div class="col-sm">
+              <form action="/token" method="post">
+                <div class="py-1"><label for="usercode">MFA Code:</label></div>
+                <div class="py-1"><input type="text" id="usercode" name="usercode" size="10"></div>
+                <div class="py-1"><input class="btn-dark btn" type="submit" value="Update / Enable MFA"></div>
+              </form>
+            </div>
+          </div>
+          <div id="tokenstring"></div>
+        </div>
+      </div>
 {% endblock %}

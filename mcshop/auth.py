@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required
 from flask_table import Table, Col, ButtonCol
 from flask_table.html import element
+import pyotp
 from .models import User
 from . import db
 
