@@ -2,12 +2,17 @@ import os
 import json
 import shutil
 from urllib.request import urlretrieve
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Blueprint, render_template, redirect, url_for, request, send_from_directory, jsonify, flash, Response
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, logout_user
 from flask_table import Table, Col, ButtonCol
 from flask_table.html import element
+import pyotp
 import docker
 import requests
+from .utils import otp_required
+from .models import User
+from . import db
 from .mcfiles import start_sh, server_props
 
 main = Blueprint('main', __name__)
@@ -49,7 +54,7 @@ def index():
 @main.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html', name=current_user.name)
+    return render_template('profile.html', name=current_user.name, email=current_user.email)
 
 class ContainerTable(Table):
     status = Col('Status')
@@ -87,7 +92,7 @@ class ContainerTable(Table):
     table_id = 'allcontainers'
 
 @main.route('/containers')
-@login_required
+@otp_required
 def containers():
     client = docker.from_env()
     allcontainers = client.containers.list(all=True)
@@ -96,7 +101,7 @@ def containers():
     return render_template('containers.html', allcontainers=table.__html__(),)
 
 @main.route('/containermgt', methods=['POST'])
-@login_required
+@otp_required
 def containermgt():
     container_id = request.args.get('id')
     task = request.args.get('task')
@@ -123,7 +128,7 @@ def containermgt():
     return redirect(url_for('main.containers'))
 
 @main.route('/serverjars', methods=['GET'])
-@login_required
+@otp_required
 def serverjars():
 
     mc_versions_result = requests.get('https://launchermeta.mojang.com/mc/game/version_manifest.json')
@@ -132,7 +137,7 @@ def serverjars():
     return render_template('serverjars.html', mc_versions=mc_versions)
 
 @main.route('/mcuuid/<name>', methods=['GET'])
-@login_required
+@otp_required
 def mcuuid(name):
 
     url = "https://api.mojang.com/users/profiles/minecraft/"+name
@@ -142,7 +147,7 @@ def mcuuid(name):
     return ('', 204)
 
 @main.route('/newmcserver', methods=['POST'])
-@login_required
+@otp_required
 def newmcserver(): #pylint: disable=too-many-locals,too-many-statements
 
     try:
@@ -241,7 +246,7 @@ class MinecraftTable(Table):
     table_id = 'allminecrafts'
 
 @main.route('/minecrafts', methods=['GET'])
-@login_required
+@otp_required
 def minecrafts():
 
     allminecrafts=[]
@@ -254,7 +259,7 @@ def minecrafts():
     return render_template('minecrafts.html', allminecrafts=table.__html__(),)
 
 @main.route('/minecraftmgt', methods=['POST'])
-@login_required
+@otp_required
 def minecraftmgt():
     name = request.args.get('name')
     task = request.args.get('task')
@@ -295,7 +300,55 @@ def flask_logger(containerid):
         yield i
 
 @main.route("/log_stream/<containerid>", methods=["GET"])
-@login_required
+@otp_required
 def stream(containerid):
     """returns logging information"""
     return Response(flask_logger(containerid), mimetype="text/plain", content_type="text/event-stream")
+
+@main.route("/token", methods=["GET"])
+@login_required
+def token():
+    totptoken = pyotp.random_base32()
+    user = User.query.filter_by(id=current_user.id).first()
+    user.totptoken = totptoken
+    db.session.commit() #pylint: disable=no-member
+    return jsonify({'SecretCode': totptoken})
+
+@main.route("/token", methods=["POST"])
+@login_required
+def checktoken():
+    usercode = request.form.get('usercode')
+    user = User.query.filter_by(id=current_user.id).first()
+    if pyotp.TOTP(user.totptoken).verify(usercode):
+        # inform users if OTP is valid
+        flash("The TOTP 2FA token has been saved.", "success")
+        logout_user()
+        return redirect(url_for('auth.login'))
+
+    flash("You have supplied an invalid 2FA token!", "danger")
+    return redirect(url_for('main.profile'))
+
+@main.route("/changepassword", methods=["POST"])
+@login_required
+def changepassword():
+    existing = request.form.get('existing')
+    newpwone = request.form.get('newpwone')
+    newpwtwo = request.form.get('newpwtwo')
+
+    if newpwone != newpwtwo:
+        flash("Passwords don't match. Please check your passwords!", "danger")
+        return redirect(url_for('main.profile'))
+
+    user = User.query.filter_by(id=current_user.id).first()
+
+    print(existing)
+    print(user.password)
+    if not user or not check_password_hash(user.password, existing):
+        flash('Please check your login details and try again.', "danger")
+        return redirect(url_for('main.profile'))
+
+    user.password = generate_password_hash(newpwone, method='sha256')
+    db.session.commit() #pylint: disable=no-member
+
+    flash('Password changed successfully.', "success")
+    return redirect(url_for('main.profile'))

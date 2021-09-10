@@ -35,12 +35,9 @@
                             <a href="{{ url_for('auth.login') }}" class="nav-link px-0 align-middle">
                                 <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Login</span> </a>
                         </li>
-                        <li>
-                            <a href="{{ url_for('auth.signup') }}" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Sign Up</span></a>
-                        </li>
                         {% endif %}
                         {% if current_user.is_authenticated %}
+                        {% if '_otp_verified' in session and session['_otp_verified'] is true %}
                         <li>
                             <a href="{{ url_for('main.containers') }}" class="nav-link px-0 align-middle">
                                 <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">Containers</span> </a>
@@ -57,6 +54,7 @@
                             <a href="{{ url_for('auth.users') }}" class="nav-link px-0 align-middle">
                                 <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Users</span> </a>
                         </li>
+                        {% endif %}
                         <li>
                             <a href="{{ url_for('main.profile') }}" class="nav-link px-0 align-middle">
                                 <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Profile</span> </a>
@@ -92,6 +90,7 @@
           {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
               {% for category, message in messages %}
+                {% if category != 'message' %}
                 <div class="alert alert-{{ category }}" role="alert">
                   <div class="row">
                     <div class='col'>
@@ -104,6 +103,7 @@
                     </div>
                   </div>
                 </div>
+                {% endif %}
               {% endfor %}
             {% endif %}
           {% endwith %}
@@ -156,6 +156,7 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery.qrcode@1.0.3/jquery.qrcode.min.js" integrity="sha256-9MzwK2kJKBmsJFdccXoIDDtsbWFh8bjYK/C7UjB1Ay0=" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='js/mcshop.js') }}"></script>
 </body>
 

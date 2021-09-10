@@ -95,9 +95,9 @@ $(document).ready(function() {
     xhr.abort();
   });
   $('#generateqrcode').click(function(){
-    //TODO: Fix useremailid
     var useremailid = $('#useremailid').text();
     var response = JSON.parse(getURL('/token'))
+    $('#qrcode').empty();
     $('#qrcode').qrcode("otpauth://totp/mcshop:"+useremailid+"?secret="+response.SecretCode+"&issuer=mcshop");
     $('#tokenstring').html( response.SecretCode )
   });

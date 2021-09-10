@@ -1,6 +1,3 @@
-Remove Sign up
+Make the password strong on user creation
 Bootstrap process with a default DB
-TOTP Setup
-Password Change
-Disable Deleting Yourself
 What to do with the Index Page?
