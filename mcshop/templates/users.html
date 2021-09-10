@@ -4,7 +4,7 @@
 <h1 class="title text-center">
   Users
 </h1>
-<div class="container">
+<div class="container text-dark">
     <div class="row">
         <div class="col-md-6 offset-md-1">
           {{ allusers|safe }}
@@ -24,20 +24,35 @@
                 </div>
                 <form action="/adduser" method="POST" class="row g-3">
                     <h3 class="text-center">Add User</h3>
-                    <div class="col-12">
+                    <div>
                         <label>Email</label>
                         <input type="text" name="email" class="form-control" placeholder="Email">
                     </div>
-                    <div class="col-12">
+                    <div>
                         <label>Username</label>
                         <input type="text" name="name" class="form-control" placeholder="Username">
                     </div>
-                    <div class="col-12">
-                        <label>Password</label>
-                        <input type="password" name="password" class="form-control" placeholder="Password">
+                    <div>
+                        <label for="newpwone">New Password:</label>
+                        <input type="password" id="newpwone" name="newpwone" autocomplete="new-password" class="form-control" placeholder="Password">
+                    </div>
+                    <div>
+                        <label for="newpwtwo">Re-Enter Password:</label>
+                        <input type="password" id="newpwtwo" name="newpwtwo" autocomplete="new-password" class="form-control" placeholder="Password">
+                    </div>
+                    <div id="pswd_info" style="display: none;">
+                        <h6>Password must meet the following requirements:</h6>
+                        <ul>
+                            <li id="match" class="text-danger">Passwords must <strong>match</strong></li>
+                            <li id="symbol" class="text-danger">At least <strong>one symbol</strong></li>
+                            <li id="letter" class="text-danger">At least <strong>one letter</strong></li>
+                            <li id="capital" class="text-danger">At least <strong>one capital letter</strong></li>
+                            <li id="number" class="text-danger">At least <strong>one number</strong></li>
+                            <li id="length" class="text-danger">Be at least <strong>8 characters</strong></li>
+                        </ul>
                     </div>
                     <div class="col-12">
-                        <button type="submit" class="btn btn-dark float-end">Add user</button>
+                        <button type="submit" class="btn btn-dark">Add user</button>
                     </div>
                 </form>
             </div>

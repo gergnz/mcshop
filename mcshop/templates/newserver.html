@@ -4,10 +4,10 @@
 <h1 class="title text-center">
   New Minecraft Instance
 </h1>
-<div class="container">
+<div class="container text-dark">
   <div class="row">
     <div class="col-md-6 offset-md-1 p-3 bg-light border rounded">
-      <h2>Version</h2>
+      <h4>Version</h4>
       <select id="version" name="version">
         {% for item in mc_versions['versions'] %}
           <option value="{{ item['id'] }}">{{ item['id'] }}</option>
@@ -17,7 +17,7 @@
   </div>
   <div class="row">
     <div class="col-md-6 offset-md-1 p-3 bg-light border rounded g-1">
-      <h2>Server Runner</h2>
+      <h4>Server Runner</h4>
       <select id="serverrunner" name="serverrunner">
         <option value="amazoncorretto:16">amazoncorretto:16</option>
       </select>
@@ -25,7 +25,7 @@
   </div>
   <div class="row">
     <div class="col-md-6 offset-md-1 p-3 bg-light border rounded g-1">
-      <h2>Game Mode</h2>
+      <h4>Game Mode</h4>
       <select id="gamemode" name="gamemode">
         <option value="survival">survival</option>
         <option value="creative">creative</option>
@@ -34,7 +34,7 @@
   </div>
   <div class="row">
     <div class="col-md-6 offset-md-1 p-3 bg-light border rounded g-1">
-      <h2>Port</h2>
+      <h4>Port</h4>
       <select id="port" name="port">
         <option value="25565">25565</option>
         <option value="12345">12345</option>
@@ -44,7 +44,7 @@
   </div>
   <div class="row">
     <div class="col-md-6 offset-md-1 p-3 bg-light border rounded g-1">
-      <h2>Ops</h2>
+      <h4>Ops</h4>
       <input type="text" id="opnamesearch">
       <button id="opsearch" class="btn btn-primary btn-sm">Search</button>
       <div id="opsearchstatus" class="pt-2"></div>
@@ -54,7 +54,7 @@
   </div>
   <div class="row">
     <div class="col-md-6 offset-md-1 p-3 bg-light border rounded g-1">
-      <h2>Whitelist</h2>
+      <h4>Whitelist</h4>
       <input type="text" id="whitelistnamesearch">
       <button id="whitelistsearch" class="btn btn-primary btn-sm">Search</button>
       <div id="whitelistsearchstatus" class="pt-2"></div>
@@ -65,7 +65,7 @@
   <div class="row">
     <div class="col-md-6 offset-md-1 p-3 bg-light border rounded g-1">
       <div class="pb-1">
-        <h2>Server Name</h2>
+        <h4>Server Name</h4>
         <input type="text" id="servername" name="servername">
         <div id="servername_info" class="pt-1">
           <p><small>Server Name must start with a letter or number, must be at least one character and can only contain letters, numbers, -, and _.</small></p>

@@ -127,14 +127,14 @@ def containermgt():
 
     return redirect(url_for('main.containers'))
 
-@main.route('/serverjars', methods=['GET'])
+@main.route('/newserver', methods=['GET'])
 @otp_required
-def serverjars():
+def newserver():
 
     mc_versions_result = requests.get('https://launchermeta.mojang.com/mc/game/version_manifest.json')
     mc_versions = mc_versions_result.json()
 
-    return render_template('serverjars.html', mc_versions=mc_versions)
+    return render_template('newserver.html', mc_versions=mc_versions)
 
 @main.route('/mcuuid/<name>', methods=['GET'])
 @otp_required
