@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="title">
+<h1 class="title text-center">
   Welcome, {{ name }}!
 </h1>
-<h2>
-  <div id="useremailid">{{ email }}</div>
-</h2>
       <div class="p-1 row">
+        <div class="col-md-6 offset-md-1 p-3">
+          <h2 class="title text-center">
+            <div id="useremailid">{{ email }}</div>
+          </h2>
+        </div>
         <div class="col-md-6 offset-md-1 p-3 bg-light border rounded">
           <h3>Change your password:</h3>
           <form action="/changepassword" method="post">
