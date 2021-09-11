@@ -55,7 +55,7 @@ def login_post():
         return redirect(url_for('auth.login'))
 
     login_user(user, remember=remember_me)
-    return redirect(url_for('main.profile'))
+    return redirect(url_for('main.minecrafts'))
 
 @auth.route('/logout')
 @login_required
@@ -106,7 +106,7 @@ def deluser():
 def adduser():
     email = request.form.get('email')
     name = request.form.get('name')
-    password = request.form.get('password')
+    password = request.form.get('newpwone')
 
     user = User.query.filter_by(email=email).first() # if this returns a user, then the email already exists in database
 
