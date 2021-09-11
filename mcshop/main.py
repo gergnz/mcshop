@@ -6,7 +6,7 @@ from urllib.request import urlretrieve
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Blueprint, render_template, redirect, url_for, request, send_from_directory, jsonify, flash, Response
 from flask_login import login_required, current_user, logout_user
-from flask_table import Table, Col, ButtonCol
+from flask_table import Table, Col, ButtonCol, LinkCol
 from flask_table.html import element
 import pyotp
 import docker
@@ -73,14 +73,14 @@ class ContainerTable(Table):
         'main.containermgt',
         url_kwargs=dict(id='id'),
         url_kwargs_extra=dict(task='stop'),
-        button_attrs={'class': 'btn btn-warning btn-sm'}
+        button_attrs={'class': 'btn btn-warning btn-sm', 'data-bs-toggle': "modal", 'data-bs-target': "#waitModal"}
     )
     start = ButtonCol(
         'Start',
         'main.containermgt',
         url_kwargs=dict(id='id'),
         url_kwargs_extra=dict(task='start'),
-        button_attrs={'class': 'btn btn-success btn-sm'}
+        button_attrs={'class': 'btn btn-success btn-sm', 'data-bs-toggle': "modal", 'data-bs-target': "#waitModal"}
     )
     logs = Modal2Col(
         'Logs',
@@ -242,6 +242,11 @@ class MinecraftTable(Table):
         url_kwargs_extra=dict(task='run'),
         button_attrs={'class': 'btn btn-primary btn-sm'}
     )
+    edit = LinkCol(
+        'Edit',
+        'main.mcedit',
+        url_kwargs=dict(mcname='name')
+    )
     classes = ['table', 'table-striped', 'table-bordered', 'bg-light']
     html_attrs = dict(cellspacing='0')
     table_id = 'allminecrafts'
@@ -353,3 +358,8 @@ def changepassword():
 
     flash('Password changed successfully.', "success")
     return redirect(url_for('main.profile'))
+
+@main.route("/mcedit/<mcname>", methods=['GET'])
+@otp_required
+def mcedit(mcname):
+    return render_template('mcedit.html', mcname=mcname)
