@@ -1,0 +1,20 @@
+version: '2.4'
+
+services:
+  caddy:
+    container_name: mcshop
+    image: gergnz/mcshop:latest
+    volumes:
+      - /home/user/minecraft:/srv/minecraft
+      - /var/run/docker.sock:/var/run/docker.sock
+      - mcshopdb:/data
+    environment:
+      - DOMAIN_HOST=mcshop.example.com
+      - BIND_IP=192.168.1.1
+      - MC_HOME=/home/user/minecraft
+    ports:
+       - 80/tcp
+       - 443/tcp
+    restart: always
+volumes:
+  mcshop:
