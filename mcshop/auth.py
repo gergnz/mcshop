@@ -43,8 +43,9 @@ def login_post():
         return redirect(url_for('auth.login')) # if the user doesn't exist or password is wrong, reload the page
 
     session['_otp_verified'] = False
-    if otp is None:
+    if otp == "":
         flash('Please setup TOTP.', 'info')
+        login_user(user, remember=remember_me)
         return redirect(url_for('main.profile'))
 
     if pyotp.TOTP(user.totptoken).verify(otp):
