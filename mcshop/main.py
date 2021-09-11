@@ -1,6 +1,7 @@
 import os
 import json
 import shutil
+import uuid
 from urllib.request import urlretrieve
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Blueprint, render_template, redirect, url_for, request, send_from_directory, jsonify, flash, Response
@@ -185,7 +186,7 @@ def newmcserver(): #pylint: disable=too-many-locals,too-many-statements
             response = requests.get(url)
             if response.status_code == 200:
                 tmp = response.json()
-                tmp['uuid'] = tmp.pop('id')
+                tmp['uuid'] = str(uuid.UUID(tmp.pop('id')))
                 tmp['level'] = 4
                 tmp['bypassesPlayerLimit'] = False
                 opslist.append(tmp)
@@ -199,7 +200,7 @@ def newmcserver(): #pylint: disable=too-many-locals,too-many-statements
             response = requests.get(url)
             if response.status_code == 200:
                 tmp = response.json()
-                tmp['uuid'] = tmp.pop('id')
+                tmp['uuid'] = str(uuid.UUID(tmp.pop('id')))
                 whitelist.append(tmp)
 
         with open('minecraft/'+servername+'/whitelist.json', 'w', encoding='UTF-8') as file:
