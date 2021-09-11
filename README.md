@@ -22,4 +22,8 @@ docker run -d \
 gergnz/mcshop:latest
 ```
 
+Then browse to your chose hostname.
+
+First user login is `admin@example.org` password `admin`.
+
 ## Development
