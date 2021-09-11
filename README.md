@@ -13,7 +13,7 @@ docker run -d \
 -e MC_HOME=/home/user/minecraft \
 -v /home/user/minecraft:/srv/minecraft \
 -v /var/run/docker.sock:/var/run/docker.sock \
--v abbdata:/data \
+-v mcshopdb:/data \
 -p 80:80 \
 -p 443:443 \
 --privileged \
