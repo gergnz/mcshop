@@ -6,3 +6,5 @@ fi
 
 rm -f /srv/mcshop/db.sqlite
 ln -s /data/db.sqlite /srv/mcshop/db.sqlite
+mkdir -p /root/.local/share
+ln -s /data/caddy /root/.local/share/
