@@ -1,3 +1,4 @@
+#pylint: disable=import-outside-toplevel
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -25,12 +26,22 @@ def create_app():
         # since the user_id is just the primary key of our user table, use it in the query for the user
         return User.query.get(int(user_id))
 
-    # blueprint for auth routes in our app
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
 
-    # blueprint for non-auth parts of app
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
+
+    from .user import user as user_blueprint
+    app.register_blueprint(user_blueprint)
+
+    from .profile import profile as profile_blueprint
+    app.register_blueprint(profile_blueprint)
+
+    from .container import container as container_blueprint
+    app.register_blueprint(container_blueprint)
+
+    from .new import new as new_blueprint
+    app.register_blueprint(new_blueprint)
 
     return app
