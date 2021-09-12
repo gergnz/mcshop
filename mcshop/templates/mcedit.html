@@ -4,7 +4,53 @@
 <h1 class="title text-center">
   Editing Minecraft Instance {{ mcname }}
 </h1>
-<h2 class="subtitle text-center">
-  TODO :)
-</h2>
+<div class="container">
+  <div class="alert alert-warning" role="alert">
+    <h4 class="alert-heading">Danger!</h4>
+    <p>You need to understand what you are doing here. Editing <b>server.properties</b> file could render your minecraft server unavailable. You have been warned.</p>
+    <hr>
+    <p class="mb-0">With great power comes great responsibility.</p>
+  </div>
+</div>
+<div class="container text-dark">
+  <div class="row">
+    <div class="col-md-6 offset-md-1 p-3 bg-light border rounded g-1">
+      <h4>Ops</h4>
+      <input type="text" id="opnamesearch">
+      <button id="opsearch" class="btn btn-primary btn-sm">Search</button>
+      <div id="opsearchstatus" class="pt-2"></div>
+      <select id="opusers" class="form-select" size="6" multiple>
+        {% for item in opusers %}
+          <option selected value="{{ item.name+'-'+item.uuid | replace('-', '') }}">{{ item.name+'-'+item.uuid | replace('-', '') }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 offset-md-1 p-3 bg-light border rounded g-1">
+      <h4>Whitelist</h4>
+      <input type="text" id="whitelistnamesearch">
+      <button id="whitelistsearch" class="btn btn-primary btn-sm">Search</button>
+      <div id="whitelistsearchstatus" class="pt-2"></div>
+      <select id="whitelistusers" class="form-select" size="6" multiple>
+        {% for item in whitelist %}
+          <option selected value="{{ item.name+'-'+item.uuid | replace('-', '') }}">{{ item.name+'-'+item.uuid | replace('-', '') }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 offset-md-1 p-3 bg-light border rounded g-1">
+      <h4>server.properties</h4>
+      <textarea id="server_props" rows="50" cols="60">{{ server_props }}</textarea>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 offset-md-1 p-3 bg-light border rounded g-1">
+      <input type="hidden" id="mcname" value="{{ mcname }}" \>
+      <button id="mcsave" class="btn btn-primary">Save Server</button>
+      <div id="savestatus" class="pt-1"></div>
+    </div>
+  </div>
+</div>
 {% endblock %}

@@ -41,6 +41,9 @@ def create_app():
     from .container import container as container_blueprint
     app.register_blueprint(container_blueprint)
 
+    from .minecraft import minecraft as minecraft_blueprint
+    app.register_blueprint(minecraft_blueprint)
+
     from .new import new as new_blueprint
     app.register_blueprint(new_blueprint)
 

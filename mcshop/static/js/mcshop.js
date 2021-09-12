@@ -37,19 +37,19 @@ $(document).ready(function() {
   $("#create").click(function() {
     $('#createstatus').html('<img src="/static/giphy.gif" height="50">');
     var opusers = $('#opusers').val();
-    var data="opusers="+opusers
+    var data="opusers="+opusers;
     var whitelistusers = $('#whitelistusers').val();
-    data=data+"&whitelistusers="+whitelistusers
-    var version = $('#version').val()
-    data=data+"&version="+version
-    var servername = $('#servername').val()
-    data=data+'&servername='+servername
-    var serverrunner = $('#serverrunner').val()
-    data=data+'&serverrunner='+serverrunner
-    var port = $('#port').val()
-    data=data+'&port='+port
-    var gamemode = $('#gamemode').val()
-    data=data+'&gamemode='+gamemode
+    data=data+"&whitelistusers="+whitelistusers;
+    var version = $('#version').val();
+    data=data+"&version="+version;
+    var servername = $('#servername').val();
+    data=data+'&servername='+servername;
+    var serverrunner = $('#serverrunner').val();
+    data=data+'&serverrunner='+serverrunner;
+    var port = $('#port').val();
+    data=data+'&port='+port;
+    var gamemode = $('#gamemode').val();
+    data=data+'&gamemode='+gamemode;
     $.post("/newmcserver", data=data)
     .done(function() {
       $('#createstatus').html('<div class="alert alert-success" role="alert">Server Created Successfully.</div>');
@@ -57,7 +57,28 @@ $(document).ready(function() {
     .fail(function(data) {
       var result = data.responseJSON;
       $('#createstatus').html('<div class="alert alert-danger" role="alert">Server Creation Failed. '+result['Error']+'</div>');
+    });
+  });
+  $("#mcsave").click(function() {
+    $('#savestatus').html('<img src="/static/giphy.gif" height="50">');
+    var opusers = $('#opusers').val();
+    var data="opusers="+opusers;
+    var whitelistusers = $('#whitelistusers').val();
+    data=data+"&whitelistusers="+whitelistusers;
+    var mcname = $('#mcname').val();
+    data=data+"&mcname="+mcname;
+    var server_props = $('#server_props').val();
+    data=data+"&server_props="+server_props;
+    var mcname = $('#mcname').val();
+    data=data+"&mcname="+mcname;
+    $.post("/mcsave", data=data)
+    .done(function() {
+      $('#savestatus').html('<div class="alert alert-success" role="alert">Server Saved Successfully.</div>');
     })
+    .fail(function(data) {
+      var result = data.responseJSON;
+      $('#savestatus').html('<div class="alert alert-danger" role="alert">Saving Server Failed. '+result['Error']+'</div>');
+    });
   });
   $('#servername').keypress(function(e) {
     if(e.which == 13){ //Enter key pressed
@@ -96,10 +117,10 @@ $(document).ready(function() {
   });
   $('#generateqrcode').click(function(){
     var useremailid = $('#useremailid').text();
-    var response = JSON.parse(getURL('/token'))
+    var response = JSON.parse(getURL('/token'));
     $('#qrcode').empty();
     $('#qrcode').qrcode("otpauth://totp/mcshop:"+useremailid+"?secret="+response.SecretCode+"&issuer=mcshop");
-    $('#tokenstring').html( response.SecretCode )
+    $('#tokenstring').html( response.SecretCode );
   });
   $('input[type=password]').keyup(function() {
 
