@@ -67,6 +67,7 @@
       <div class="pb-1">
         <h4>Server Name</h4>
         <input type="text" id="servername" name="servername">
+        <input type="hidden" id="_csrf_token" name="_csrf_token" value="{{ csrf_token() }}">
         <div id="servername_info" class="pt-1">
           <p><small>Server Name must start with a letter or number, must be at least one character and can only contain letters, numbers, -, and _.</small></p>
         </div>

@@ -6,3 +6,5 @@ flask-table
 uwsgi
 docker
 pyotp
+flask-talisman
+flask-seasurf

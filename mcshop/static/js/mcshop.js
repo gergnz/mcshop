@@ -50,6 +50,8 @@ $(document).ready(function() {
     data=data+'&port='+port;
     var gamemode = $('#gamemode').val();
     data=data+'&gamemode='+gamemode;
+    var _csrf_token = $('#_csrf_token').val();
+    data=data+'&_csrf_token='+_csrf_token;
     $.post("/newmcserver", data=data)
     .done(function() {
       $('#createstatus').html('<div class="alert alert-success" role="alert">Server Created Successfully.</div>');
@@ -71,6 +73,8 @@ $(document).ready(function() {
     data=data+"&server_props="+server_props;
     var mcname = $('#mcname').val();
     data=data+"&mcname="+mcname;
+    var _csrf_token = $('#_csrf_token').val();
+    data=data+'&_csrf_token='+_csrf_token;
     $.post("/mcsave", data=data)
     .done(function() {
       $('#savestatus').html('<div class="alert alert-success" role="alert">Server Saved Successfully.</div>');

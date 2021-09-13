@@ -2,11 +2,34 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_talisman import Talisman
+from flask_seasurf import SeaSurf
 
 db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
+
+    SeaSurf(app)
+
+    csp = {
+        'default-src': '\'self\'',
+        'script-src': [
+            '\'self\'',
+            'https://cdn.jsdelivr.net'
+        ],
+        'font-src': 'https://cdn.jsdelivr.net',
+        'style-src': [
+            'https://cdn.jsdelivr.net',
+            '\'sha256-pSbjG217o7W/VwmF9vxu3sCO3CMsdtsdAX54YrPw3rg=\'',
+            '\'sha256-biLFinpqYMtWHmXfkA1BPeCY0/fNt46SAZ+BBk5YUog=\'',
+            '\'unsafe-hashes\''
+        ]
+    }
+
+    permissions_policy={}
+
+    Talisman(app, content_security_policy=csp, permissions_policy=permissions_policy)
 
     app.config['SECRET_KEY'] = 'E65983E0-3AB3-420F-BAE8-0CCF19B3CF0D'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
