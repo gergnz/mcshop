@@ -1,6 +1,10 @@
 # mcshop
 Minecraft Docker Server Management
 
+# Documentation
+
+https://www.performancemagic.com/minecraft-shop/
+
 ## Deployment
 This container is available in arm64 or amd64 from https://hub.docker.com/r/gergnz/mcshop.
 
@@ -27,3 +31,11 @@ Then browse to your chose hostname.
 First user login is `admin@example.org` password `admin`.
 
 ## Development
+
+This application was developed using:
+
+* Python Flask
+* JavaScript jQuery
+* Bootstrap 5
+
+You can simply run `flask run` from the root directory.
