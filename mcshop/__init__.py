@@ -6,11 +6,12 @@ from flask_talisman import Talisman
 from flask_seasurf import SeaSurf
 
 db = SQLAlchemy()
+csrf = SeaSurf()
 
 def create_app():
     app = Flask(__name__)
 
-    SeaSurf(app)
+    csrf.init_app(app)
 
     csp = {
         'default-src': '\'self\'',

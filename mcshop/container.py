@@ -53,6 +53,10 @@ def containers():
     client = docker.from_env()
     allcontainers = client.containers.list(all=True)
 
+    for cont in allcontainers:
+        if cont.name == 'mcshop':
+            allcontainers.remove(cont)
+
     table = ContainerTable(allcontainers)
     return render_template('containers.html', allcontainers=table.__html__(),)
 

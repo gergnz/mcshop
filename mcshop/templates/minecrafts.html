@@ -8,8 +8,10 @@
     <div class="row">
       <div class="col-md-6 offset-md-1">
         <h4 class="text-center">
-          Disk Usage: {{ '%0.2f'| format(stat['used']/1024/1024/1024) }} GB / {{ '%0.2f'| format(stat['total']/1024/1024/1024) }} GB
-          ({{ '%0.2f'| format(stat['used'] / stat['total'] * 100) }}%)
+          <div id="diskusage">
+            Disk Usage: {{ '%0.2f'| format(stat['used']/1024/1024/1024) }} GB / {{ '%0.2f'| format(stat['total']/1024/1024/1024) }} GB
+             - ({{ '%0.2f'| format(stat['used'] / stat['total'] * 100) }}%)
+          </div>
         </h4>
       </div>
     </div>

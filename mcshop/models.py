@@ -7,3 +7,4 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(100))
     name = db.Column(db.String(1000))
     totptoken = db.Column(db.String(40))
+    useradmin = db.Column(db.Boolean, default=False)

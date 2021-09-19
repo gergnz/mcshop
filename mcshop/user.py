@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, render_template, redirect, url_for, request, flash, session, abort
 from werkzeug.security import generate_password_hash
-from flask_table import Table, Col
+from flask_table import Table, Col, BoolCol
 from .utils import otp_required, UserModalCol
 from .models import User
 from . import db
@@ -10,6 +10,7 @@ user = Blueprint('user', __name__)
 class UserTable(Table):
     name = Col('Name')
     email = Col('Email')
+    useradmin = BoolCol('User Administrator')
     delete = UserModalCol(
         'Delete',
         'user.deluser',
@@ -23,6 +24,8 @@ class UserTable(Table):
 @user.route('/users', methods=['GET'])
 @otp_required
 def users():
+    if not session['useradmin']:
+        abort(403)
     allusers = User.query.all()
 
     table = UserTable(allusers)
@@ -49,6 +52,7 @@ def adduser():
     email = request.form.get('email')
     name = request.form.get('name')
     password = request.form.get('newpwone')
+    useradmin = bool(request.form.get('useradmin'))
 
     localuser = User.query.filter_by(email=email).first()
 
@@ -56,7 +60,7 @@ def adduser():
         flash('Email address already exists')
         return redirect(url_for('user.users'))
 
-    new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'))
+    new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'), useradmin=useradmin)
 
     db.session.add(new_user) #pylint: disable=no-member
     db.session.commit() #pylint: disable=no-member

@@ -35,6 +35,7 @@ def login_post():
         flash('TOTP Check Failed. Please check your login details and try again.')
         return redirect(url_for('auth.login'))
 
+    session['useradmin'] = user.useradmin
     login_user(user, remember=remember_me)
     return redirect(url_for('minecraft.minecrafts'))
 

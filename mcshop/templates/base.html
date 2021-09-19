@@ -44,10 +44,13 @@
                             <a href="{{ url_for('minecraft.minecrafts') }}" class="nav-link px-0 align-middle">
                                 <i class="fs-4 bi-box"></i> <span class="ms-1 d-none d-sm-inline">Minecrafts</span> </a>
                         </li>
+
+                        {% if 'useradmin' in session and session['useradmin'] is true %}
                         <li>
                             <a href="{{ url_for('user.users') }}" class="nav-link px-0 align-middle">
                                 <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Users</span> </a>
                         </li>
+                        {% endif %}
                         {% endif %}
                         <li>
                             <a href="{{ url_for('profile.profilepage') }}" class="nav-link px-0 align-middle">
@@ -102,7 +105,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <form id="formdelete" method="POST"><button type="submit" class="btn btn-danger">Delete</button></form>
+                    <form id="formdelete" method="POST"><button type="submit" class="btn btn-danger">Delete</button>
+                      <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                    </form>
                 </div>
             </div>
         </div>

@@ -1,4 +1,16 @@
 $(document).ready(function() {
+  var diskusage = $("#diskusage").text();
+  if (diskusage != '') {
+    percent = diskusage.split('-');
+    var percentraw = percent[1].replace("(", "")
+    .replace(")", "")
+    .replace("%", "")
+    .replace(" ", "");
+    if ( parseFloat(percentraw) > 90 ) {
+      $("#diskusage").addClass('text-danger');
+    }
+  }
+  
   $("#opsearch").click(function() {
     var name = $("#opnamesearch").val();
     var url = "/mcuuid/"+name;

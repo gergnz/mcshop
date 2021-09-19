@@ -4,45 +4,13 @@ import uuid
 import shutil
 from pathlib import Path
 import requests
-from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
+from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify, _app_ctx_stack
 from flask_table import Table, Col, ButtonCol, LinkCol
 import docker
 from .utils import otp_required, ModalCol
 
 minecraft = Blueprint('minecraft', __name__)
 
-class MinecraftTable(Table):
-    name = Col('Name')
-    size = Col('Size (GB)')
-    edit = LinkCol(
-        'Edit',
-        'minecraft.mcedit',
-        url_kwargs=dict(mcname='name')
-    )
-    delete = ModalCol(
-        'Delete',
-        'minecraft.minecraftmgt',
-        url_kwargs=dict(name='name'),
-        url_kwargs_extra=dict(task='delete'),
-        button_attrs={'class': 'btn btn-danger btn-sm', 'data-bs-toggle': 'modal', 'data-bs-target': '#deleteModal'}
-    )
-    run = ButtonCol(
-        'Run',
-        'minecraft.minecraftmgt',
-        url_kwargs=dict(name='name'),
-        url_kwargs_extra=dict(task='run'),
-        button_attrs={'class': 'btn btn-primary btn-sm'}
-    )
-    purgelogs = ButtonCol(
-        'Purge Logs',
-        'minecraft.minecraftmgt',
-        url_kwargs=dict(name='name'),
-        url_kwargs_extra=dict(task='purgelogs'),
-        button_attrs={'class': 'btn btn-dark btn-sm'}
-    )
-    classes = ['table', 'table-striped', 'table-bordered', 'bg-light']
-    html_attrs = dict(cellspacing='0')
-    table_id = 'allminecrafts'
 
 @minecraft.route('/minecrafts', methods=['GET'])
 @otp_required
@@ -56,6 +24,42 @@ def minecrafts():
         size = sum(f.stat().st_size for f in root_directory.glob('**/*') if f.is_file())
         allminecrafts.append({'name': item, 'size': round(size/1024/1024/1024,2)})
 
+    token=_app_ctx_stack.top._csrf_token #pylint: disable=protected-access
+    class MinecraftTable(Table):
+
+        name = Col('Name')
+        size = Col('Size (GB)')
+        edit = LinkCol(
+            'Edit',
+            'minecraft.mcedit',
+            url_kwargs=dict(mcname='name')
+        )
+        delete = ModalCol(
+            'Delete',
+            'minecraft.minecraftmgt',
+            url_kwargs=dict(name='name'),
+            url_kwargs_extra=dict(task='delete'),
+            button_attrs={'class': 'btn btn-danger btn-sm', 'data-bs-toggle': 'modal', 'data-bs-target': '#deleteModal'}
+        )
+        run = ButtonCol(
+            'Run',
+            'minecraft.minecraftmgt',
+            url_kwargs=dict(name='name'),
+            url_kwargs_extra=dict(task='run'),
+            form_hidden_fields=dict(_csrf_token=token),
+            button_attrs={'class': 'btn btn-primary btn-sm'}
+        )
+        purgelogs = ButtonCol(
+            'Purge Logs',
+            'minecraft.minecraftmgt',
+            url_kwargs=dict(name='name'),
+            url_kwargs_extra=dict(task='purgelogs'),
+            form_hidden_fields=dict(_csrf_token=token),
+            button_attrs={'class': 'btn btn-dark btn-sm'}
+        )
+        classes = ['table', 'table-striped', 'table-bordered', 'bg-light']
+        html_attrs = dict(cellspacing='0')
+        table_id = 'allminecrafts'
     table = MinecraftTable(allminecrafts)
     stat = shutil.disk_usage('minecraft')
     return render_template('minecrafts.html', allminecrafts=table.__html__(), stat=stat)
