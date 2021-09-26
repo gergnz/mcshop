@@ -1,44 +1,9 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash, Response
+from flask import Blueprint, render_template, redirect, url_for, request, flash, Response, _app_ctx_stack
 from flask_table import Table, Col, ButtonCol
 import docker
 from .utils import otp_required, ModalCol, Modal2Col
 
 container = Blueprint('container', __name__)
-
-class ContainerTable(Table):
-    status = Col('Status')
-    image = Col('Image')
-    name = Col('Name')
-    delete = ModalCol(
-        'Delete',
-        'container.containermgt',
-        url_kwargs=dict(id='id'),
-        url_kwargs_extra=dict(task='delete'),
-        button_attrs={'class': 'btn btn-danger btn-sm', 'data-bs-toggle': 'modal', 'data-bs-target': '#deleteModal'}
-    )
-    stop = ButtonCol(
-        'Stop',
-        'container.containermgt',
-        url_kwargs=dict(id='id'),
-        url_kwargs_extra=dict(task='stop'),
-        button_attrs={'class': 'btn btn-warning btn-sm', 'data-bs-toggle': "modal", 'data-bs-target': "#waitModal"}
-    )
-    start = ButtonCol(
-        'Start',
-        'container.containermgt',
-        url_kwargs=dict(id='id'),
-        url_kwargs_extra=dict(task='start'),
-        button_attrs={'class': 'btn btn-success btn-sm', 'data-bs-toggle': "modal", 'data-bs-target': "#waitModal"}
-    )
-    logs = Modal2Col(
-        'Logs',
-        '',
-        url_kwargs=dict(id='id'),
-        button_attrs={'class': 'btn btn-secondary btn-sm', 'data-bs-toggle': 'modal', 'data-bs-target': '#logsModal'}
-    )
-    classes = ['table', 'table-striped', 'table-bordered', 'bg-light']
-    html_attrs = dict(cellspacing='0')
-    table_id = 'allcontainers'
 
 def flask_logger(containerid):
     """creates logging information"""
@@ -56,6 +21,45 @@ def containers():
     for cont in allcontainers:
         if cont.name == 'mcshop':
             allcontainers.remove(cont)
+
+    token=_app_ctx_stack.top._csrf_token #pylint: disable=protected-access
+
+    class ContainerTable(Table):
+        status = Col('Status')
+        image = Col('Image')
+        name = Col('Name')
+        delete = ModalCol(
+            'Delete',
+            'container.containermgt',
+            url_kwargs=dict(id='id'),
+            url_kwargs_extra=dict(task='delete'),
+            button_attrs={'class': 'btn btn-danger btn-sm', 'data-bs-toggle': 'modal', 'data-bs-target': '#deleteModal'}
+        )
+        stop = ButtonCol(
+            'Stop',
+            'container.containermgt',
+            url_kwargs=dict(id='id'),
+            url_kwargs_extra=dict(task='stop'),
+            form_hidden_fields=dict(_csrf_token=token),
+            button_attrs={'class': 'btn btn-warning btn-sm', 'data-bs-toggle': "modal", 'data-bs-target': "#waitModal"}
+        )
+        start = ButtonCol(
+            'Start',
+            'container.containermgt',
+            url_kwargs=dict(id='id'),
+            url_kwargs_extra=dict(task='start'),
+            form_hidden_fields=dict(_csrf_token=token),
+            button_attrs={'class': 'btn btn-success btn-sm', 'data-bs-toggle': "modal", 'data-bs-target': "#waitModal"}
+        )
+        logs = Modal2Col(
+            'Logs',
+            '',
+            url_kwargs=dict(id='id'),
+            button_attrs={'class': 'btn btn-secondary btn-sm', 'data-bs-toggle': 'modal', 'data-bs-target': '#logsModal'}
+        )
+        classes = ['table', 'table-striped', 'table-bordered', 'bg-light']
+        html_attrs = dict(cellspacing='0')
+        table_id = 'allcontainers'
 
     table = ContainerTable(allcontainers)
     return render_template('containers.html', allcontainers=table.__html__(),)
