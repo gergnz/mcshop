@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="title text-center">
+  Minecraft Instances
+</h1>
+<div class="container">
+    <div class="row py-5">
+        <div class="col-md-6 offset-md-1">
+            <input id="fileupload" type="file" name="fileupload" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 offset-md-1">
+            {{ allminecrafts|safe }}
+        </div>
+        <div id="uploadstatus" class="pt-1"></div>
+    </div>
+</div>
+<script>
+async function uploadFile(mcname, unzip) {
+    let formData = new FormData();           
+    formData.append("file", fileupload.files[0]);
+    formData.append("mcname", mcname);
+    formData.append("unzip", unzip);
+    formData.append("_csrf_token", "{{ csrf_token() }}");
+    await fetch("/upload", { method: "POST", body: formData }).then((response) => {
+        if (response.status != 201) {
+          throw new Error("Bad response from server: "+response.text());
+        }
+        return response;
+    }).then((returnedResponse) => {
+        $('#uploadstatus').html('<div class="alert alert-success" role="alert">File uploaded Successfully.</div>');
+    }).catch((error) => {
+        $('#uploadstatus').html('<div class="alert alert-danger" role="alert">File upload Failed. '+error+'</div>');
+    });
+}
+</script>
+{% endblock %}
