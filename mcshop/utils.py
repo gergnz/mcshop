@@ -48,3 +48,15 @@ class Modal2Col(ButtonCol):
             content=self.text(item, attr_list),
         )
         return button
+
+class FileButtonCol(ButtonCol):
+    def td_contents(self, item, attr_list):
+        button_attrs = dict(self.button_attrs)
+        unzip = button_attrs.pop('unzip', False)
+        button_attrs['onclick']="uploadFile('"+item['name']+"', '"+str(unzip)+"')"
+        button = element(
+            'button',
+            attrs=button_attrs,
+            content=self.text(item, attr_list),
+        )
+        return button
