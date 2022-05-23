@@ -137,8 +137,6 @@ def mcsave(): #pylint: disable=too-many-locals,too-many-statements
         mcname = request.form.get('mcname')
         server_props = request.form.get('server_props')
 
-        print(mcname)
-
         opslist=[]
         for user in opusers.split(','):
             url = "https://api.mojang.com/users/profiles/minecraft/"+user

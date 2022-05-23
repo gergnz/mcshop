@@ -15,6 +15,10 @@ def create_app():
 
     csp = {
         'default-src': '\'self\'',
+        'img-src': [
+            '\'self\'',
+            'data:'
+        ],
         'script-src': [
             '\'unsafe-inline\'',
             '\'self\'',
