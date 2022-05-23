@@ -32,24 +32,4 @@
 
   </div>
 </div>
-<script>
-async function uploadFile(mcname, task) {
-    let formData = new FormData();           
-    formData.append("file", fileupload.files[0]);
-    formData.append("mcname", mcname);
-    formData.append("task", task);
-    formData.append("_csrf_token", "{{ csrf_token() }}");
-    await fetch("/upload", { method: "POST", body: formData }).then( async (response) => {
-        if (response.status != 201) {
-          result = await response.text();
-          throw new Error("Bad response from server: "+result);
-        }
-        return response;
-    }).then((returnedResponse) => {
-        $('#uploadstatus').html('<div class="alert alert-success" role="alert">File uploaded Successfully.</div>');
-    }).catch((error) => {
-        $('#uploadstatus').html('<div class="alert alert-danger" role="alert">File upload Failed. '+error+'</div>');
-    });
-}
-</script>
 {% endblock %}
