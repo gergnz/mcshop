@@ -20,7 +20,6 @@ def create_app():
             'data:'
         ],
         'script-src': [
-            '\'unsafe-inline\'',
             '\'self\'',
             'https://cdn.jsdelivr.net'
         ],
