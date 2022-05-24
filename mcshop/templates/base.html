@@ -44,7 +44,10 @@
                             <a href="{{ url_for('minecraft.minecrafts') }}" class="nav-link px-0 align-middle">
                                 <i class="fs-4 bi-box"></i> <span class="ms-1 d-none d-sm-inline">Minecrafts</span> </a>
                         </li>
-
+                        <li>
+                            <a href="{{ url_for('advanced.advance') }}" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-box"></i> <span class="ms-1 d-none d-sm-inline">Advanced</span> </a>
+                        </li>
                         {% if 'useradmin' in session and session['useradmin'] is true %}
                         <li>
                             <a href="{{ url_for('user.users') }}" class="nav-link px-0 align-middle">

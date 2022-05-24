@@ -41,7 +41,28 @@ class UserModalCol(ButtonCol):
 class Modal2Col(ButtonCol):
     def td_contents(self, item, attr_list):
         button_attrs = dict(self.button_attrs)
-        button_attrs['data-href']=self.url_kwargs(item)['id']
+        forge = button_attrs.pop('forge', '')
+        button_attrs['data-href']=self.url_kwargs(item)['id']+forge
+        button = element(
+            'button',
+            attrs=button_attrs,
+            content=self.text(item, attr_list),
+        )
+        return button
+
+class FileButtonCol(ButtonCol):
+    def td_contents(self, item, attr_list):
+        button_attrs = dict(self.button_attrs)
+        unzip = button_attrs.pop('unzip', False)
+        run = button_attrs.pop('run', False)
+        task = ''
+        if unzip:
+            task = 'unzip'
+        elif run:
+            task = 'run'
+        button_attrs['id']='uploadFile'+task
+        button_attrs['data-item']=item['name']
+        button_attrs['data-task']=task
         button = element(
             'button',
             attrs=button_attrs,

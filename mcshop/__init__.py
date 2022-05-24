@@ -15,6 +15,10 @@ def create_app():
 
     csp = {
         'default-src': '\'self\'',
+        'img-src': [
+            '\'self\'',
+            'data:'
+        ],
         'script-src': [
             '\'self\'',
             'https://cdn.jsdelivr.net'
@@ -70,5 +74,8 @@ def create_app():
 
     from .new import new as new_blueprint
     app.register_blueprint(new_blueprint)
+
+    from .advanced import advanced as advanced_blueprint
+    app.register_blueprint(advanced_blueprint)
 
     return app
