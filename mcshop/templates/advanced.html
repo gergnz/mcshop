@@ -2,8 +2,9 @@
 
 {% block content %}
 <h1 class="title text-center">
-  Minecraft Instances
+  Advanceded Options
 </h1>
+<input type="hidden" id="_csrf_token" name="_csrf_token" value="{{ csrf_token() }}">
 <button class="btn btn-info" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">Toggle Instructions</button>
 <div class="container">
     <div class="row py-5">

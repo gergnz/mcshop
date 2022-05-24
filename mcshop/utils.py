@@ -55,12 +55,14 @@ class FileButtonCol(ButtonCol):
         button_attrs = dict(self.button_attrs)
         unzip = button_attrs.pop('unzip', False)
         run = button_attrs.pop('run', False)
-        task = 'False'
+        task = ''
         if unzip:
             task = 'unzip'
         elif run:
             task = 'run'
-        button_attrs['onclick']="uploadFile('"+item['name']+"', '"+task+"')"
+        button_attrs['id']='uploadFile'+task
+        button_attrs['data-item']=item['name']
+        button_attrs['data-task']=task
         button = element(
             'button',
             attrs=button_attrs,

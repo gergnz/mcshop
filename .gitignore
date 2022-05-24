@@ -10,3 +10,4 @@ __pycache__
 cdk.out
 minecraft
 db.sqlite
+node_modules
