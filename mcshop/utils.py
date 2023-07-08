@@ -60,7 +60,7 @@ class FileButtonCol(ButtonCol):
             task = 'unzip'
         elif run:
             task = 'run'
-        button_attrs['id']='uploadFile'+task
+        button_attrs['class']=button_attrs['class']+' uploadFile'+task
         button_attrs['data-item']=item['name']
         button_attrs['data-task']=task
         button = element(

@@ -96,9 +96,9 @@ $(document).ready(function() {
                 $('#savestatus').html('<div class="alert alert-danger" role="alert">Saving Server Failed. '+result['Error']+'</div>');
             });
     });
-    $('#uploadFile').click(function() { uploadFile('uploadFile'); });
-    $('#uploadFilerun').click(function() { uploadFile('uploadFilerun'); });
-    $('#uploadFileunzip').click(function() { uploadFile('uploadFileunzip'); });
+    $('.uploadFile').click(function( ) {uploadFile($(this)); });
+    $('.uploadFilerun').click(function() { uploadFile($(this)); });
+    $('.uploadFileunzip').click(function() { uploadFile($(this)); });
     $('#servername').keypress(function(e) {
         if(e.which == 13){ //Enter key pressed
             $('#create').click(); //Trigger search button click event
@@ -212,14 +212,16 @@ function getURL(url){
     }).responseText;
 }
 
-function uploadFile(name) {
-    var item = $('#'+name).data('item');
-    var task = $('#'+name).data('task');
+function uploadFile(elem) {
+
+    var item = $(elem).data('item');
+    var task = $(elem).data('task');
     if (task === '') { task = 'False'; }
     var _csrf_token = $('#_csrf_token').val();
     var file = $('#fileupload');
 
-    console.log(_csrf_token);
+    console.log(item);
+    console.log(task);
 
     let formData = new FormData();
     formData.append('file', file.prop('files')[0]);
